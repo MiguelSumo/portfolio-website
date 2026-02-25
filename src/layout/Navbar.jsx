@@ -15,9 +15,20 @@ export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState(null);
 
+  const scrollToContact = () => {
+    const section = document.querySelector("#contact");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const isPastTop = window.scrollY > 50;
+      setIsScrolled(isPastTop);
+      if (!isPastTop) {
+        setActiveLink(null);
+      }
     };
 
     const observerOptions = {
@@ -26,14 +37,21 @@ export const Navbar = () => {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute("id");
-          setActiveLink(`#${id}`);
+        if (!entry.isIntersecting) return;
+        if (window.scrollY <= 50) return;
+        const id = entry.target.getAttribute("id");
+        if (id === "contact") {
+          setActiveLink(null);
+          return;
         }
+
+        setActiveLink(`#${id}`);
       });
     }, observerOptions);
 
-    navLinks.forEach((link) => {
+    const observedLinks = [...navLinks, { href: "#contact" }];
+
+    observedLinks.forEach((link) => {
       const element = document.querySelector(link.href);
       if (element) observer.observe(element);
     });
@@ -57,7 +75,7 @@ export const Navbar = () => {
           href="#"
           className="text-xl font-bold tracking-tight hover:text-primary"
         >
-          MS<span className="text-primary text-green-500">.</span>
+          MS<span className="text-primary">.</span>
         </a>
 
         {/* Desktop Nav */}
@@ -81,7 +99,7 @@ export const Navbar = () => {
 
         {/* CTA Button */}
         <div className="hidden md:block">
-          <Button size="sm">Contact Me</Button>
+          <Button size="sm" onClick={scrollToContact}>Contact Me</Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -108,7 +126,12 @@ export const Navbar = () => {
               </a>
             ))}
 
-            <Button onClick={() => setIsMobileMenuOpen(false)}>
+            <Button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                scrollToContact();
+              }}
+            >
               Contact Me
             </Button>
           </div>

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/Button";
 import {
   ArrowRight,
@@ -11,26 +10,38 @@ import {
 import { AnimatedBorderButton } from "../components/AnimatedBorderButton";
 
 const skills = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "Node.js",
-  "SQL",
-  "Python",
-  "MongoDB",
-  "Azure",
-  "Docker",
+  "Agile",
   "AWS",
-  "Vercel",
-  "Tailwind CSS",
-  "Prisma",
-  "Jest",
-  "Cypress",
+  "Azure",
+  "C#",
+  "C++",
+  "Docker",
   "Figma",
   "Git",
+  "Java",
+  "Kali Linux",
+  "Microsoft",
+  "Microsoft Visual Studio",
+  "MongoDB",
+  "Next.js",
+  "Python",
+  "React",
+  "SQL",
+  "Tailwind CSS",
+  "TypeScript",
+  "Ubuntu",
+  "Unity",
+  "VMWare"
 ];
 
 export const Hero = () => {
+  const scrollToContact = () => {
+    const section = document.querySelector("#contact");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Bg */}
@@ -40,7 +51,7 @@ export const Hero = () => {
           alt="Hero image"
           className="w-full h-full object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/80 to-background" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/20 via-background/80 to-background" />
       </div>
 
       {/* Green Dots */}
@@ -85,16 +96,22 @@ export const Hero = () => {
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
-                Hi, I'm Miguel Sumo — an aspiring software analyst. I'm majoring in Management Information Systems at Minnesota State University, Mankato. I have a passion for crafting efficient and scalable software solutions that drive business success. With a strong foundation in data analysis and software development, I'm eager to contribute my skills to innovative projects and make a meaningful impact in the tech industry.
+                Hi, I'm Miguel Sumo — an aspiring software analyst and Management Information Systems major at Minnesota State University, Mankato.
+                I am passionate about crafting efficient, scalable software solutions that drive business success. 
+                With a strong foundation in data analysis and development, I am currently on track to complete 
+                my Certificate in Software Development and Database Technologies, 
+                further sharpening my ability to build robust, data-driven applications. 
+                I am eager to contribute my technical skills to innovative projects 
+                and make a meaningful impact in the tech industry.
               </p>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button size="lg">
+              <Button size="lg" onClick={scrollToContact}>
                 Contact Me <ArrowRight className="w-5 h-5" />
               </Button>
-              <AnimatedBorderButton>
+              <AnimatedBorderButton href="/resumeCurrent" download="Miguel_Sumo_Resume.pdf">
                 <Download className="w-5 h-5" />
                 Download CV
               </AnimatedBorderButton>
@@ -119,20 +136,20 @@ export const Hero = () => {
             </div>
           </div>
           {/* Right Column - Profile Image */}
-          <div className="relatice animate-fade-in animation-delay-300">
+          <div className="relative animate-fade-in animation-delay-300">
             {/* Profile Image */}
             <div className="relative max-w-md mx-auto">
               <div
                 className="absolute inset-0 
-              rounded-3xl bg-gradient-to-br 
+              rounded-3xl bg-linear-to-br 
               from-primary/30 via-transparent 
               to-primary/10 blur-2xl animate-pulse"
               />
               <div className="relative glass rounded-3xl p-2 glow-border">
                 <img
-                  src="/profile-photo.jpg"
-                  alt="Pedro Machado"
-                  className="w-full aspect-[4/5] object-cover rounded-2xl"
+                  src="/portfolio_profile_pic.png"
+                  alt="Miguel Sumo"
+                  className="w-full aspect-4/5 object-cover rounded-2xl"
                 />
 
                 {/* Floating Badge */}
@@ -146,9 +163,9 @@ export const Hero = () => {
                 </div>
                 {/* Stats Badge */}
                 <div className="absolute -top-4 -left-4 glass rounded-xl px-4 py-3 animate-float animation-delay-500">
-                  <div className="text-2xl font-bold text-primary">5+</div>
+                  <div className="text-2xl font-bold text-primary">6+</div>
                   <div className="text-xs text-muted-foreground">
-                    Years Exp.
+                    Months Exp.
                   </div>
                 </div>
               </div>
@@ -159,20 +176,20 @@ export const Hero = () => {
         {/* Skills Section */}
         <div className="mt-20 animate-fade-in animation-delay-600">
           <p className="text-sm text-muted-foreground mb-6 text-center">
-            Technologies I work with
+            Skills + Assets
           </p>
           <div className="relative overflow-hidden">
             <div
               className="absolute left-0 top-0 bottom-0 w-32
-             bg-gradient-to-r from-background to-transparent z-10"
+             bg-linear-to-r from-background to-transparent z-10"
             />
             <div
               className="absolute right-0 top-0 bottom-0 w-32
-             bg-gradient-to-l from-background to-transparent z-10"
+             bg-linear-to-l from-background to-transparent z-10"
             />
             <div className="flex animate-marquee">
               {[...skills, ...skills].map((skill, idx) => (
-                <div key={idx} className="flex-shrink-0 px-8 py-4">
+                <div key={idx} className="shrink-0 px-8 py-4">
                   <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
                     {skill}
                   </span>
