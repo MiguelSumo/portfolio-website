@@ -1,14 +1,16 @@
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Github } from "lucide-react";
 import { AnimatedBorderButton } from "@/components/AnimatedBorderButton";
 const projects = [
-  {
-    title: "Portfolio Website",
+  
+   {
+    title: "Data Analytic Dashboard",
     description:
-      "A responsive portfolio website showcasing projects, skills, and experience.",
-    image: "/portfoliowebsite.png",
-    tags: ["React", "Tailwind", "Framer Motion"],
+      "Developed an interactive data analytics dashboard using Power BI. The dashboard provides real-time insights and visualizations for business performance metrics, enabling data-driven decision-making.",
+    image: "/powerbi.png",
+    tags: ["Power BI", "Problem Solving", "Data Analysis", "Data Visualization"],
     link: "#",
-    github: "https://github.com/MiguelSumo/portfolio-website",
+    github: "#",
   },
   {
     title: "Lone Pilot Protocal",
@@ -37,9 +39,32 @@ const projects = [
     link: "#",
     github: "#",
   },
+   {
+    title: "Portfolio Website",
+    description:
+      "A responsive portfolio website showcasing projects, skills, and experience.",
+    image: "/portfoliowebsite.png",
+    tags: ["React", "Tailwind", "Framer Motion"],
+    link: "#",
+    github: "https://github.com/MiguelSumo/portfolio-website",
+  },
 ];
 
 export const Projects = () => {
+  const [showAll, setShowAll] = useState(false);
+  const visibleProjects = showAll ? projects : projects.slice(0, 4);
+  const gridRef = useRef(null);
+  const [gridMaxHeight, setGridMaxHeight] = useState("0px");
+
+  useEffect(() => {
+    if (!gridRef.current) {
+      return;
+    }
+
+    const nextHeight = gridRef.current.scrollHeight;
+    setGridMaxHeight(`${nextHeight}px`);
+  }, [showAll, visibleProjects.length]);
+
   return (
     <section id="projects" className="py-32 relative overflow-hidden">
       {/* Bg glows */}
@@ -64,8 +89,13 @@ export const Projects = () => {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, idx) => (
+        <div
+          id="projects-grid"
+          ref={gridRef}
+          className="grid md:grid-cols-2 gap-8 overflow-hidden transition-[max-height] duration-700 ease-in-out"
+          style={{ maxHeight: gridMaxHeight }}
+        >
+          {visibleProjects.map((project, idx) => (
             <div
               key={idx}
               className="group glass rounded-2xl overflow-hidden animate-fade-in md:row-span-1"
@@ -140,8 +170,13 @@ export const Projects = () => {
         {/* View All CTA */}
         {projects.length > 4 && (
           <div className="text-center mt-12 animate-fade-in animation-delay-500">
-            <AnimatedBorderButton>
-              View All Projects
+            <AnimatedBorderButton
+              type="button"
+              onClick={() => setShowAll((current) => !current)}
+              aria-expanded={showAll}
+              aria-controls="projects-grid"
+            >
+              {showAll ? "Show Fewer Projects" : "View All Projects"}
               <ArrowUpRight className="w-5 h-5" />
             </AnimatedBorderButton>
           </div>
