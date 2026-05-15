@@ -42,6 +42,21 @@
 
 @layer components {
 
+  .mobile-project-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .mobile-project-clamp {
+      display: block;
+      -webkit-line-clamp: unset;
+      overflow: visible;
+    }
+  }
+
   .glass {
     background-color: rgba(26, 35, 41, 0.5); /* fallback for color-mix */
     -webkit-backdrop-filter: blur(16px);

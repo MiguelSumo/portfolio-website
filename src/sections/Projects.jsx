@@ -79,34 +79,59 @@ export const Projects = () => {
   const gridRef = useRef(null);
   const [gridMaxHeight, setGridMaxHeight] = useState("0px");
 
-  useEffect(() => {
+  const updateGridHeight = () => {
     if (!gridRef.current) {
       return;
     }
 
-    const nextHeight = gridRef.current.scrollHeight;
-    setGridMaxHeight(`${nextHeight}px`);
+    setGridMaxHeight(`${gridRef.current.scrollHeight}px`);
+  };
+
+  useEffect(() => {
+    updateGridHeight();
   }, [showAll, visibleProjects.length]);
 
+  useEffect(() => {
+    if (!gridRef.current || typeof window === "undefined") {
+      return;
+    }
+
+    const handleResize = () => updateGridHeight();
+    window.addEventListener("resize", handleResize);
+
+    let observer;
+    if (typeof ResizeObserver !== "undefined") {
+      observer = new ResizeObserver(() => updateGridHeight());
+      observer.observe(gridRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, []);
+
   return (
-    <section id="projects" className="py-32 relative overflow-hidden">
+    <section id="projects" className="relative overflow-hidden py-20 md:py-32">
       {/* Bg glows */}
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-highlight/5 rounded-full blur-3xl" />
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mx-auto max-w-3xl mb-16">
+        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
           <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase animate-fade-in">
             Featured Work
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 animate-fade-in animation-delay-100 text-secondary-foreground">
+          <h2 className="mt-4 mb-4 animate-fade-in text-3xl font-bold text-secondary-foreground animation-delay-100 sm:text-4xl md:mb-6 md:text-5xl">
             Projects that
             <span className="font-serif italic font-normal text-white">
               {" "}
               create curiosity.
             </span>
           </h2>
-          <p className="text-muted-foreground animate-fade-in animation-delay-200">
+          <p className="animate-fade-in text-sm text-muted-foreground animation-delay-200 sm:text-base">
             A selection of my recent work, that showcase my skills and creativity.
           </p>
         </div>
@@ -115,7 +140,7 @@ export const Projects = () => {
         <div
           id="projects-grid"
           ref={gridRef}
-          className="grid md:grid-cols-2 gap-8 overflow-hidden transition-[max-height] duration-700 ease-in-out"
+          className="grid gap-5 overflow-hidden transition-[max-height] duration-700 ease-in-out sm:gap-6 md:grid-cols-2 md:gap-8"
           style={{ maxHeight: gridMaxHeight }}
         >
           {visibleProjects.map((project, idx) => (
@@ -125,7 +150,7 @@ export const Projects = () => {
               style={{ animationDelay: `${(idx + 1) * 100}ms` }}
             >
               {/* Media */}
-              <div className="relative overflow-hidden aspect-video">
+              <div className="relative aspect-video overflow-hidden">
                 {project.image ? (
                   <img
                     src={project.image}
@@ -143,12 +168,12 @@ export const Projects = () => {
                  to-transparent opacity-60"
                 />
                 {/* Overlay Links */}
-                <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-x-3 bottom-3 z-10 flex flex-wrap items-center justify-center gap-2 opacity-100 transition-opacity duration-300 md:inset-0 md:gap-4 md:opacity-0 md:group-hover:opacity-100">
                   {project.video && (
                     <button
                       type="button"
                       onClick={() => setActivePreview(project)}
-                      className="px-4 py-2 rounded-full glass hover:bg-primary hover:text-primary-foreground transition-all text-sm font-medium"
+                      className="rounded-full glass px-3 py-1.5 text-xs font-medium transition-all hover:bg-primary hover:text-primary-foreground sm:px-4 sm:py-2 sm:text-sm"
                     >
                       View Slideshow
                     </button>
@@ -156,7 +181,7 @@ export const Projects = () => {
                   {project.link && project.link !== "#" && (
                     <a
                       href={project.link}
-                      className="p-3 rounded-full glass hover:bg-primary hover:text-primary-foreground transition-all"
+                      className="rounded-full glass p-2.5 transition-all hover:bg-primary hover:text-primary-foreground sm:p-3"
                     >
                       <ArrowUpRight className="w-5 h-5" />
                     </a>
@@ -164,7 +189,7 @@ export const Projects = () => {
                   {project.github && project.github !== "#" && (
                     <a
                       href={project.github}
-                      className="p-3 rounded-full glass hover:bg-primary hover:text-primary-foreground transition-all"
+                      className="rounded-full glass p-2.5 transition-all hover:bg-primary hover:text-primary-foreground sm:p-3"
                     >
                       <Github className="w-5 h-5" />
                     </a>
@@ -173,9 +198,9 @@ export const Projects = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-4">
+              <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
                 <div className="flex items-start justify-between">
-                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                  <h3 className="text-lg font-semibold transition-colors group-hover:text-primary sm:text-xl">
                     {project.title}
                   </h3>
                   {project.link && project.link !== "#" && (
@@ -187,14 +212,14 @@ export const Projects = () => {
                     />
                   )}
                 </div>
-                <p className="text-muted-foreground text-sm">
+                <p className="mobile-project-clamp text-sm leading-relaxed text-muted-foreground">
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
-                      className="px-4 py-1.5 rounded-full bg-surface text-xs font-medium border border-border/50 text-muted-foreground hover:border-primary/50 hover:text-primary transition-all duration-300"
+                      className="rounded-full border border-border/50 bg-surface px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary sm:px-4 sm:text-xs"
                     >
                       {tag}
                     </span>
@@ -207,7 +232,7 @@ export const Projects = () => {
 
         {/* View All CTA */}
         {projects.length > 4 && (
-          <div className="text-center mt-12 animate-fade-in animation-delay-500">
+          <div className="mt-10 text-center animate-fade-in animation-delay-500 md:mt-12">
             <AnimatedBorderButton
               type="button"
               onClick={() => setShowAll((current) => !current)}
@@ -226,22 +251,22 @@ export const Projects = () => {
             onClick={() => setActivePreview(null)}
           >
             <div
-              className="w-full max-w-4xl overflow-hidden rounded-2xl border border-border/50 bg-card shadow-2xl"
+              className="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-border/50 bg-card shadow-2xl"
               onClick={(event) => event.stopPropagation()}
             >
               <div className="flex items-center justify-between border-b border-border/50 px-4 py-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-secondary-foreground">
+                  <h3 className="text-base font-semibold text-secondary-foreground sm:text-lg">
                     {activePreview.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground sm:text-sm">
                     Video preview
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setActivePreview(null)}
-                  className="rounded-full px-3 py-1 text-sm text-muted-foreground transition-colors hover:bg-surface hover:text-secondary-foreground"
+                  className="rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:bg-surface hover:text-secondary-foreground sm:text-sm"
                 >
                   Close
                 </button>
